@@ -36,7 +36,7 @@ namespace Spellplague.Utility
         {
             if (BaseInstance != null) { return true; }
 
-            T[] instances = FindObjectsOfType<T>(true);
+            T[] instances = FindObjectsOfType<T>();
             if (instances.Length <= 0)
             {
                 GameObject typeGameObject = new GameObject($"{typeof(T).Name}");

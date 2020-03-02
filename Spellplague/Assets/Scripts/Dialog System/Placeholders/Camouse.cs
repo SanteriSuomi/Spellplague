@@ -1,13 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Spellplague.DialogSystem
-
 {
 	public class Camouse : MonoBehaviour
 	{
-
 		[SerializeField]
 		public float sensitivity = 5.0f;
 		[SerializeField]
@@ -22,7 +18,7 @@ namespace Spellplague.DialogSystem
 		// Use this for initialization
 		void Start()
 		{
-			character = this.transform.parent.gameObject;
+			character = transform.parent.gameObject;
 		}
 
 		// Update is called once per frame

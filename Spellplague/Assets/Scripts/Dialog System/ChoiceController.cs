@@ -5,9 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 
 namespace Spellplague.DialogSystem
-
 {
-
 	[System.Serializable]
 	public class DialogChangeEvent : UnityEvent<Dialog> { }
 

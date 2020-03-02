@@ -1,12 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 namespace Spellplague.DialogSystem
-
 {
-
 	public class DialogTrigger : MonoBehaviour
 	{
 		private GameObject dialogCanvas;
@@ -16,6 +11,7 @@ namespace Spellplague.DialogSystem
 		{
 			dialogCanvas = transform.GetChild(0).gameObject;
 		}
+
 		void OnTriggerEnter(Collider other)
 		{
 			if (other.tag == "Player")

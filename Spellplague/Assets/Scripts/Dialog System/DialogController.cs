@@ -1,14 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using System.Collections;
 
 namespace Spellplague.DialogSystem
-
 {
-
 	[System.Serializable]
-
 	public class DecisionEvent : UnityEvent<Decision> { }
 
 	public class DialogController : MonoBehaviour
@@ -46,7 +42,6 @@ namespace Spellplague.DialogSystem
 			}
 		}
 
-		//
 		private void Initialize()
 		{
 			dialogStarted = true;
@@ -67,6 +62,7 @@ namespace Spellplague.DialogSystem
 			else
 				AdvanceDialog();
 		}
+
 		void DisplayLine()
 		{
 			Line line = activeDialog.lines[activeLineIndex];
@@ -107,7 +103,6 @@ namespace Spellplague.DialogSystem
 				EndDialog();
 		}
 
-
 		public void ChangeDialog(Dialog nextDialog)
 		{
 			dialogStarted = false;
@@ -125,6 +120,5 @@ namespace Spellplague.DialogSystem
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
 		}
-
 	}
 }

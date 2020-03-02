@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Spellplague.DialogSystem
-
 {
-
 	public class PlayerCont : MonoBehaviour
 	{
 		public float speed = 10.0f;

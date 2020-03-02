@@ -2,7 +2,6 @@
 using Spellplague.Utility;
 using UnityEngine;
 using UnityEngine.AI;
-using Spellplague.AI;
 
 namespace Spellplague.AI
 {
@@ -27,7 +26,7 @@ namespace Spellplague.AI
         public float damage = 10;
         public float destinationOffset = 1.5f;
         public GameObject target;
-       // public Animator anim;
+        // public Animator anim;
 
         private bool isAware = false;
         private bool isDetecting = false;
@@ -142,6 +141,7 @@ namespace Spellplague.AI
             {
                 return false;
             }
+
             Collider[] player = Physics.OverlapSphere(transform.position, zombieDetectionRadius);
             for (int i = 0; i < player.Length; i++)
             {
@@ -207,7 +207,9 @@ namespace Spellplague.AI
                 }
                 else
                 {
+                    #if UNITY_EDITOR
                     Debug.LogWarning("Please assign more than 1 waypoint to the AI" + gameObject.name);
+                    #endif
                 }
             }
         }
@@ -226,7 +228,7 @@ namespace Spellplague.AI
             Destroy(gameObject);
         }
         //not sure if works 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         //To see zombie fov in editor
         private void OnDrawGizmos()
         {
