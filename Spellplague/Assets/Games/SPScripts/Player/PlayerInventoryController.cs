@@ -39,13 +39,17 @@ namespace Spellplague.Inventory
 				case InventoryState.Closed:
 					ClosedInventoryState();
 					break;
+
 				case InventoryState.Open:
 					OpenInventoryState();
 					break;
+
 				default:
 					Debug.LogWarning("Should not be here.");
 					break;
 			}
+			Debug.Log(playerState.CurrentInventoryState);
+
 		}
 
 		private void ClosedInventoryState()

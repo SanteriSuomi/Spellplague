@@ -58,6 +58,7 @@ namespace Spellplague.Utility
 
         private void OnEnable()
         {
+            Debug.Log("asd");
             CurrentPlayerStance = PlayerStance.Upright;
             CurrentPlayerMoveState = PlayerMove.Still;
             CurrentPlayerSpecialState = PlayerSpecialState.None;

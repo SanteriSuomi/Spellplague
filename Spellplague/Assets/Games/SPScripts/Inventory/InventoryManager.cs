@@ -114,6 +114,7 @@ namespace Spellplague.Inventory
 
         private RectTransform SlotPosition(int column, int row)
         {
+            if (itemSlot == null) return null;
             RectTransform newItemSlot = Instantiate(itemSlot);
             newItemSlot.SetParent(itemContainer);
             newItemSlot.anchoredPosition = new Vector2(column, row);
