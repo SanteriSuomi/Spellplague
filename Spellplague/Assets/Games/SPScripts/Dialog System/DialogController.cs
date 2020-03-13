@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
 using Spellplague.Utility;
+using System.Text;
 
 namespace Spellplague.DialogSystem
 {
@@ -13,6 +14,7 @@ namespace Spellplague.DialogSystem
 	{
 		[SerializeField]
 		private InputSystemVariable controls = default;
+		private WaitForSeconds dialogTextTypeWFS;
 
 		[HideInInspector]
 		public Dialog _dialog;
@@ -23,7 +25,6 @@ namespace Spellplague.DialogSystem
 		public GameObject dialogPanel;
 
 		private Dialog activeDialog;
-
 		private SpeakerUI speakerUILeft;
 		private SpeakerUI speakerUIRight;
 
@@ -33,13 +34,13 @@ namespace Spellplague.DialogSystem
 		private int activeLineIndex;
 		private bool dialogActive = false;
 		private bool dialogStarted = false;
-
 		private bool isTyping = false;
 		private bool cancelTyping = false;
 		public float typeSpeed;
 
 		void Awake()
 		{
+			dialogTextTypeWFS = new WaitForSeconds(typeSpeed);
 			controls.Value.Player.Inspect.performed += ctx => StartConversation();
 			controls.Value.Player.Inspect.performed += ctx => AdvanceLine();
 			controls.Value.UI.Cancel.performed += ctx => EndDialog();
@@ -120,11 +121,13 @@ namespace Spellplague.DialogSystem
 			panelText.text = "";
 			isTyping = true;
 			cancelTyping = false;
+			StringBuilder dialogStringBuilder = new StringBuilder();
 			while (isTyping && !cancelTyping && (letter < line.Length - 1))
 			{
-				panelText.text += line[letter];
+				dialogStringBuilder.Append(line[letter]);
+				panelText.text = dialogStringBuilder.ToString();
 				letter += 1;
-				yield return new WaitForSeconds(typeSpeed);
+				yield return dialogTextTypeWFS;
 			}
 
 			panelText.text = line;
