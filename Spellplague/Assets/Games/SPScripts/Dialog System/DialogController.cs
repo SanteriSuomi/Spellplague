@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
 using Spellplague.Utility;
-using System.Text;
 
 namespace Spellplague.DialogSystem
 {
@@ -66,8 +65,6 @@ namespace Spellplague.DialogSystem
 
 		private void Initialize()
 		{
-			controls.Value.Player.ThirdPerson.Disable();
-			controls.Value.Player.ThirdPersonZoom.Disable();
 			dialogStarted = true;
 			activeLineIndex = 0;
 			speakerUILeft.Speaker = activeDialog.speakerLeft;
@@ -164,8 +161,6 @@ namespace Spellplague.DialogSystem
 			dialogPanel.SetActive(false);
 			speakerUILeft.Hide();
 			speakerUIRight.Hide();
-			controls.Value.Player.ThirdPerson.Enable();
-			controls.Value.Player.ThirdPersonZoom.Enable();
 		}
 	}
 }

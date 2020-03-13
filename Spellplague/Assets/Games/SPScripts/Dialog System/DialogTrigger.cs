@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Spellplague.Utility;
+using UnityEngine;
 
 namespace Spellplague.DialogSystem
 
@@ -6,12 +7,16 @@ namespace Spellplague.DialogSystem
 
 	public class DialogTrigger : MonoBehaviour
 	{
+		[SerializeField]
+		private InputSystemVariable inputSystem = default;
+
 		public Dialog dialog;
 
 		public GameObject dialogBase;
 		public GameObject dialogHint;
 
 		private DialogController dialogController;
+
 		void Start()
 		{
 			dialogController = dialogBase.GetComponentInChildren<DialogController>();
@@ -19,8 +24,10 @@ namespace Spellplague.DialogSystem
 
 		void OnTriggerEnter(Collider other)
 		{
-			if (other.tag == "Player")
+			if (other.CompareTag("Player"))
 			{
+				inputSystem.Value.Player.ThirdPerson.Disable();
+				inputSystem.Value.Player.ThirdPersonZoom.Disable();
 				dialogHint.SetActive(true);
 				dialogController._dialog = dialog;
 				dialogBase.SetActive(true);
@@ -29,9 +36,10 @@ namespace Spellplague.DialogSystem
 
 		void OnTriggerExit(Collider other)
 		{
-			if (other.tag == "Player")
+			if (other.CompareTag("Player"))
 			{
-				//dialogController.EndDialog();
+				inputSystem.Value.Player.ThirdPerson.Enable();
+				inputSystem.Value.Player.ThirdPersonZoom.Enable();
 				dialogBase.SetActive(false);
 				dialogHint.SetActive(false);
 			}
