@@ -165,9 +165,6 @@ namespace Spellplague.DialogSystem
 			speakerUIRight.Hide();
 			controls.Value.Player.ThirdPerson.Enable();
 			controls.Value.Player.ThirdPersonZoom.Enable();
-			//noteHandler.enabled = true;
-			//playerMovement.enabled = true;
-			//pauseMenu.enabled = true;
 		}
 	}
 }
