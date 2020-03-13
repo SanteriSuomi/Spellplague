@@ -12,7 +12,7 @@ namespace Spellplague.DialogSystem
 	public class DialogController : MonoBehaviour
 	{
 		[SerializeField]
-		private InputSystemVariable controls;
+		private InputSystemVariable controls = default;
 
 		[HideInInspector]
 		public Dialog _dialog;
@@ -40,8 +40,6 @@ namespace Spellplague.DialogSystem
 
 		void Awake()
 		{
-			//controls.Value.Player.Jump.performed += ctx => AdvanceLine();
-			//controls.Value.Player.Voice.performed += ctx => CallAudio();
 			controls.Value.Player.Inspect.performed += ctx => StartConversation();
 			controls.Value.Player.Inspect.performed += ctx => AdvanceLine();
 			controls.Value.UI.Cancel.performed += ctx => EndDialog();
@@ -60,11 +58,6 @@ namespace Spellplague.DialogSystem
 			if (activeDialog == null) return;
 			if (!dialogActive)
 			{
-				Cursor.lockState = CursorLockMode.Locked;
-				Cursor.visible = false;
-				//noteHandler.enabled = false;
-				//playerMovement.enabled = false;
-				//pauseMenu.enabled = false;
 				dialogActive = true;
 				Initialize();
 			}
@@ -72,6 +65,8 @@ namespace Spellplague.DialogSystem
 
 		private void Initialize()
 		{
+			controls.Value.Player.ThirdPerson.Disable();
+			controls.Value.Player.ThirdPersonZoom.Disable();
 			dialogStarted = true;
 			activeLineIndex = 0;
 			speakerUILeft.Speaker = activeDialog.speakerLeft;
@@ -101,19 +96,16 @@ namespace Spellplague.DialogSystem
 			activeLine = activeDialog.lines[activeLineIndex].text;
 			DialogCharacter character = line.character;
 
-
 			if (speakerUILeft.SpeakerIs(character))
 			{
 				speakerUILeft.Show();
 				speakerUIRight.Hide();
 			}
-
 			else if (speakerUIRight.SpeakerIs(character))
 			{
 				speakerUIRight.Show();
 				speakerUILeft.Hide();
 			}
-
 			else
 			{
 				speakerUILeft.Hide();
@@ -136,6 +128,7 @@ namespace Spellplague.DialogSystem
 				letter += 1;
 				yield return new WaitForSeconds(typeSpeed);
 			}
+
 			panelText.text = line;
 			isTyping = false;
 			cancelTyping = false;
@@ -146,10 +139,6 @@ namespace Spellplague.DialogSystem
 			if (activeDialog.decision != null)
 			{
 				decisionEvent.Invoke(activeDialog.decision);
-
-				Cursor.lockState = CursorLockMode.None;
-				Cursor.visible = true;
-
 				panelText.text = "";
 			}
 			else if (activeDialog.nextDialog != null)
@@ -174,8 +163,8 @@ namespace Spellplague.DialogSystem
 			dialogPanel.SetActive(false);
 			speakerUILeft.Hide();
 			speakerUIRight.Hide();
-			Cursor.lockState = CursorLockMode.Locked;
-			Cursor.visible = false;
+			controls.Value.Player.ThirdPerson.Enable();
+			controls.Value.Player.ThirdPersonZoom.Enable();
 			//noteHandler.enabled = true;
 			//playerMovement.enabled = true;
 			//pauseMenu.enabled = true;

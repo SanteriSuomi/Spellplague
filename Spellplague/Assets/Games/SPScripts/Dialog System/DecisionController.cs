@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -43,6 +42,7 @@ namespace Spellplague.DialogSystem
 				ChoiceController cc = ChoiceController.AddChoiceButton(choiceButtons[index], decision.choices[index]);
 				choiceControllers.Add(cc);
 			}
+
 			defaultSelected.Select();
 		}
 	}
