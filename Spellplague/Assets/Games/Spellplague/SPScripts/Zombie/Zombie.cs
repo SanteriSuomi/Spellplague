@@ -25,8 +25,7 @@ namespace Spellplague.AI
         public float playerDamageDistance = 1.6f;
         public float damage = 10;
         public float destinationOffset = 1.5f;
-        public GameObject target;
-        // public Animator anim;
+        private GameObject target;
 
         private bool isAware = false;
         private bool isDetecting = false;
@@ -227,6 +226,7 @@ namespace Spellplague.AI
             //anim.SetBool("isDying", true);
             Destroy(gameObject);
         }
+
         //not sure if works 
         #if UNITY_EDITOR
         //To see zombie fov in editor

@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 0
   prefab: {fileID: 5144031256891555467, guid: 6664d9f53837f944f899ddc93b5798d4, type: 3}
-  sprite: {fileID: 21300000, guid: 74c4699d93ec4b94f99d76d0ec6d4342, type: 3}
+  sprite: {fileID: 21300000, guid: 7da7d9fd811118b4b949be610c836fd1, type: 3}
   description: A key
