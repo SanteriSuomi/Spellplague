@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
 using Spellplague.Utility;
+using System.Text;
 
 namespace Spellplague.DialogSystem
 {

@@ -48,16 +48,14 @@ namespace Spellplague.Inventory
 					Debug.LogWarning("Should not be here.");
 					break;
 			}
-			Debug.Log(playerState.CurrentInventoryState);
-
 		}
 
 		private void ClosedInventoryState()
 		{
-			Cursor.lockState = CursorLockMode.Confined;
 			inputSystem.Value.Player.Looking.Disable();
 			inventoryUI.SetActive(true);
 			playerState.CurrentInventoryState = InventoryState.Open;
+			Cursor.lockState = CursorLockMode.Confined;
 			Cursor.visible = true;
 		}
 
