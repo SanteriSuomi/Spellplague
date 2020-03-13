@@ -52,6 +52,7 @@ namespace Spellplague.DialogSystem
 			speakerUIRight = speakerRight.GetComponent<SpeakerUI>();
 			panelText = dialogPanel.GetComponentInChildren<Text>();
 			activeDialog = _dialog;
+			StartConversation();
 		}
 
 		private void StartConversation()
