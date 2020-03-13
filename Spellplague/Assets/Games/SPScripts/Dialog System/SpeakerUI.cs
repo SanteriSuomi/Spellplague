@@ -1,12 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Spellplague.DialogSystem
 {
+
 	public class SpeakerUI : MonoBehaviour
 	{
-		public Image portrait;
-		public Text fullName;
+		//public Image portrait;
+		public GameObject portrait;
+		public GameObject namePanel;
+		//public Text fullName;
 
 		private DialogCharacter speaker;
 		public DialogCharacter Speaker
@@ -15,8 +20,10 @@ namespace Spellplague.DialogSystem
 			set
 			{
 				speaker = value;
-				portrait.sprite = speaker.portrait;
-				fullName.text = speaker.fullName;
+				//portrait.sprite = speaker.portrait;
+				//fullName.text = speaker.fullName;
+				portrait.GetComponent<Image>().sprite = speaker.portrait;
+				namePanel.GetComponentInChildren<Text>().text = speaker.fullName;
 			}
 		}
 
@@ -32,12 +39,16 @@ namespace Spellplague.DialogSystem
 
 		public void Show()
 		{
-			gameObject.SetActive(true);
+			//gameObject.SetActive(true);
+			namePanel.SetActive(true);
+			portrait.SetActive(true);
 		}
 
 		public void Hide()
 		{
-			gameObject.SetActive(false);
+			//gameObject.SetActive(false);
+			namePanel.SetActive(false);
+			portrait.SetActive(false);
 		}
 	}
 }

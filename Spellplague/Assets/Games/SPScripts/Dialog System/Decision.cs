@@ -1,7 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
 
 namespace Spellplague.DialogSystem
 {
+
 	[System.Serializable]
 
 	public struct Choice

@@ -12,7 +12,7 @@ namespace Spellplague.DialogSystem
 		void Start()
 		{
 			// turn off the cursor
-			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.lockState = CursorLockMode.Confined;
 		}
 
 		// Update is called once per frame
@@ -28,6 +28,7 @@ namespace Spellplague.DialogSystem
 			{
 				// turn on the cursor
 				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
 			}
 		}
 	}

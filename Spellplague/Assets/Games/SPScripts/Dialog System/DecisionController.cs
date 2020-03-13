@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Spellplague.DialogSystem
 {
+
 	public class DecisionController : MonoBehaviour
 	{
 		public Decision decision;
 		public GameObject[] choiceButtons;
+		public Button defaultSelected;
 
 		private List<ChoiceController> choiceControllers = new List<ChoiceController>();
 
@@ -39,6 +43,7 @@ namespace Spellplague.DialogSystem
 				ChoiceController cc = ChoiceController.AddChoiceButton(choiceButtons[index], decision.choices[index]);
 				choiceControllers.Add(cc);
 			}
+			defaultSelected.Select();
 		}
 	}
 }

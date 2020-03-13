@@ -54,10 +54,11 @@ namespace Spellplague.Inventory
 
 		private void ClosedInventoryState()
 		{
-			inputSystem.Value.Player.Looking.Disable();
 			Cursor.lockState = CursorLockMode.Confined;
+			inputSystem.Value.Player.Looking.Disable();
 			inventoryUI.SetActive(true);
 			playerState.CurrentInventoryState = InventoryState.Open;
+			Cursor.visible = true;
 		}
 
 		private void OpenInventoryState()
@@ -66,6 +67,7 @@ namespace Spellplague.Inventory
 			Cursor.lockState = CursorLockMode.Locked;
 			inventoryUI.SetActive(false);
 			playerState.CurrentInventoryState = InventoryState.Closed;
+			Cursor.visible = false;
 		}
 
 		private void OnDisable()

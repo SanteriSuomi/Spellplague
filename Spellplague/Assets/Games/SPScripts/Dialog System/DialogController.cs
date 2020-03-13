@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Collections;
+using Spellplague.Utility;
 
 namespace Spellplague.DialogSystem
 {
@@ -9,7 +11,11 @@ namespace Spellplague.DialogSystem
 
 	public class DialogController : MonoBehaviour
 	{
-		public Dialog dialog;
+		[SerializeField]
+		private InputSystemVariable controls;
+
+		[HideInInspector]
+		public Dialog _dialog;
 		public DecisionEvent decisionEvent;
 
 		public GameObject speakerLeft;
@@ -21,24 +27,46 @@ namespace Spellplague.DialogSystem
 		private SpeakerUI speakerUILeft;
 		private SpeakerUI speakerUIRight;
 
-		private Text activeLine;
+		private Text panelText;
+		private string activeLine;
 
 		private int activeLineIndex;
+		private bool dialogActive = false;
 		private bool dialogStarted = false;
 
-		void Start()
+		private bool isTyping = false;
+		private bool cancelTyping = false;
+		public float typeSpeed;
+
+		void Awake()
 		{
-			speakerUILeft = speakerLeft.GetComponent<SpeakerUI>();
-			speakerUIRight = speakerRight.GetComponent<SpeakerUI>();
-			activeLine = dialogPanel.GetComponentInChildren<Text>();
-			activeDialog = dialog;
+			//controls.Value.Player.Jump.performed += ctx => AdvanceLine();
+			//controls.Value.Player.Voice.performed += ctx => CallAudio();
+			controls.Value.Player.Inspect.performed += ctx => StartConversation();
+			controls.Value.Player.Inspect.performed += ctx => AdvanceLine();
+			controls.Value.UI.Cancel.performed += ctx => EndDialog();
 		}
 
-		void Update()
+		void Start()
+		{	
+			speakerUILeft = speakerLeft.GetComponent<SpeakerUI>();
+			speakerUIRight = speakerRight.GetComponent<SpeakerUI>();
+			panelText = dialogPanel.GetComponentInChildren<Text>();
+			activeDialog = _dialog;
+		}
+
+		private void StartConversation()
 		{
-			if (Input.GetKeyDown(KeyCode.F))
+			if (activeDialog == null) return;
+			if (!dialogActive)
 			{
-				AdvanceLine();
+				Cursor.lockState = CursorLockMode.Locked;
+				Cursor.visible = false;
+				//noteHandler.enabled = false;
+				//playerMovement.enabled = false;
+				//pauseMenu.enabled = false;
+				dialogActive = true;
+				Initialize();
 			}
 		}
 
@@ -49,25 +77,30 @@ namespace Spellplague.DialogSystem
 			speakerUILeft.Speaker = activeDialog.speakerLeft;
 			speakerUIRight.Speaker = activeDialog.speakerRight;
 			dialogPanel.SetActive(true);
-			Cursor.lockState = CursorLockMode.Confined;
-			Cursor.visible = true;
+			DisplayLine();
 		}
 
 		void AdvanceLine()
 		{
-			if (activeDialog == null) return;
-			if (!dialogStarted) Initialize();
-			if (activeLineIndex < activeDialog.lines.Length)
-				DisplayLine();
-			else
-				AdvanceDialog();
+			if (dialogActive)
+			{
+				if (!dialogStarted)
+					Initialize();
+				else if (isTyping)
+					cancelTyping = true;
+				else if (activeLineIndex < activeDialog.lines.Length)
+					DisplayLine();
+				else
+					AdvanceDialog();
+			}
 		}
 
 		void DisplayLine()
 		{
 			Line line = activeDialog.lines[activeLineIndex];
-			activeLine.text = line.text;
+			activeLine = activeDialog.lines[activeLineIndex].text;
 			DialogCharacter character = line.character;
+
 
 			if (speakerUILeft.SpeakerIs(character))
 			{
@@ -87,15 +120,37 @@ namespace Spellplague.DialogSystem
 				speakerUIRight.Hide();
 			}
 
+			if (!isTyping)
+				StartCoroutine(TextScroll(activeLine));
+
+		}
+		private IEnumerator TextScroll(string line)
+		{
+			int letter = 0;
+			panelText.text = "";
+			isTyping = true;
+			cancelTyping = false;
+			while (isTyping && !cancelTyping && (letter < line.Length - 1))
+			{
+				panelText.text += line[letter];
+				letter += 1;
+				yield return new WaitForSeconds(typeSpeed);
+			}
+			panelText.text = line;
+			isTyping = false;
+			cancelTyping = false;
 			activeLineIndex += 1;
 		}
-
 		private void AdvanceDialog()
 		{
 			if (activeDialog.decision != null)
 			{
 				decisionEvent.Invoke(activeDialog.decision);
-				activeLine.text = "";
+
+				Cursor.lockState = CursorLockMode.None;
+				Cursor.visible = true;
+
+				panelText.text = "";
 			}
 			else if (activeDialog.nextDialog != null)
 				ChangeDialog(activeDialog.nextDialog);
@@ -112,13 +167,18 @@ namespace Spellplague.DialogSystem
 
 		private void EndDialog()
 		{
-			activeDialog = dialog;
+			activeDialog = _dialog;
+			dialogActive = false;
 			dialogStarted = false;
+			cancelTyping = true;
 			dialogPanel.SetActive(false);
 			speakerUILeft.Hide();
 			speakerUIRight.Hide();
 			Cursor.lockState = CursorLockMode.Locked;
 			Cursor.visible = false;
+			//noteHandler.enabled = true;
+			//playerMovement.enabled = true;
+			//pauseMenu.enabled = true;
 		}
 	}
 }

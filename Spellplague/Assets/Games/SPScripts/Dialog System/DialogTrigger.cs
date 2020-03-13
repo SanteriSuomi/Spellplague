@@ -1,29 +1,40 @@
 ﻿using UnityEngine;
 
 namespace Spellplague.DialogSystem
+
 {
+
 	public class DialogTrigger : MonoBehaviour
 	{
-		private GameObject dialogCanvas;
+		public Dialog dialog;
+
+		public GameObject dialogBase;
 		public GameObject dialogHint;
 
-		private void Start()
+		private DialogController dialogController;
+		void Start()
 		{
-			dialogCanvas = transform.GetChild(0).gameObject;
+			dialogController = dialogBase.GetComponentInChildren<DialogController>();
 		}
 
 		void OnTriggerEnter(Collider other)
 		{
 			if (other.tag == "Player")
-				dialogCanvas.SetActive(true);
+			{
 				dialogHint.SetActive(true);
+				dialogController._dialog = dialog;
+				dialogBase.SetActive(true);
+			}
 		}
 
 		void OnTriggerExit(Collider other)
 		{
 			if (other.tag == "Player")
-				dialogCanvas.SetActive(false);
+			{
+				//dialogController.EndDialog();
+				dialogBase.SetActive(false);
 				dialogHint.SetActive(false);
+			}
 		}
 	}
 }
