@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0f14a459fdd83d4bb182535264deb24, type: 3}
+  m_Name: GuardTalk4
+  m_EditorClassIdentifier: 
+  speakerLeft: {fileID: 11400000, guid: aeec5f26cfb973d40a5c010ac6a8c014, type: 2}
+  speakerRight: {fileID: 11400000, guid: 5686dbde167bc424a97395f4f62b9aac, type: 2}
+  decision: {fileID: 0}
+  nextDialog: {fileID: 0}
+  lines:
+  - character: {fileID: 11400000, guid: 5686dbde167bc424a97395f4f62b9aac, type: 2}
+    text: "Oh, and before you go, you might wanna check the infirmary first. Reports
+      \rsaid that it all started after a woman was brought there before the chaos
+      began. They \rsaid she was bitten by someone. You can find the infirmary to
+      the right from the gate. \rIt\u2019s a big building, you can\u2019t miss it.\r"
