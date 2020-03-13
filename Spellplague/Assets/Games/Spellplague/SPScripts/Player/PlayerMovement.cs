@@ -1,7 +1,5 @@
 ﻿using Spellplague.Utility;
-using System;
 using System.Collections;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,6 +18,7 @@ namespace Spellplague.Player
         private PlayerGravity playerGravity;
         private Transform playerTransform;
         private Coroutine playerCameraFovCoroutine;
+        private WaitForSeconds jumpWFS;
         private Vector2 moveReadValue;
         private Vector3 moveValue;
 
@@ -30,20 +29,14 @@ namespace Spellplague.Player
         [SerializeField]
         private float crouchSpeedMultiplier = 0.5f;
         [SerializeField]
-        private float jumpHeight = 1.25f;
-        [SerializeField]
-        private float jumpTime = 22.5f;
-        [SerializeField]
-        private float jumpMultiplierValue = 3.5f;
-        [SerializeField]
-        private float maxJumpTime = 0.8f;
-        [SerializeField]
         private float playerCameraMaxRunFov = 110;
         [SerializeField]
         private float playerCameraRunFovChangeSpeed = 2.5f;
+        [SerializeField]
+        private float jumpDuration = 1.1f;
+        [SerializeField]
+        private float jumpSpeed = 5;
         private float playerCameraMinFov;
-        private float maxVerticalHeight;
-        private float timeBeforeJump;
 
         private bool isJumping;
         private bool isGrounded;
@@ -52,6 +45,7 @@ namespace Spellplague.Player
 
         private void Awake()
         {
+            jumpWFS = new WaitForSeconds(jumpDuration);
             characterController = GetComponent<CharacterController>();
             playerGravity = GetComponent<PlayerGravity>();
             playerTransform = transform;
@@ -68,7 +62,7 @@ namespace Spellplague.Player
             inputSystem.Value.Player.Sprint.canceled += SprintCanceled;
             playerGravity.IsGroundedEvent += IsGrounded;
             inputSystem.Value.Player.Jump.Enable();
-            inputSystem.Value.Player.Jump.performed += JumpPerformedAsync;
+            inputSystem.Value.Player.Jump.performed += JumpPerformed;
             inputSystem.Value.Player.Crouch.Enable();
             inputSystem.Value.Player.Crouch.performed += CrouchPerformed;
             inputSystem.Value.Player.Crouch.canceled += CrouchCanceled;
@@ -97,7 +91,6 @@ namespace Spellplague.Player
             isSprinting = true;
             if (playerState.CurrentPlayerSpecialState != PlayerSpecialState.Inspecting)
             {
-                if (playerCameraFovCoroutine != null) StopCoroutine(playerCameraFovCoroutine);
                 playerCameraFovCoroutine = StartCoroutine(ChangeCameraFov(playerCameraMaxRunFov));
             }
 
@@ -112,7 +105,6 @@ namespace Spellplague.Player
             isSprinting = false;
             if (playerState.CurrentPlayerSpecialState != PlayerSpecialState.Inspecting)
             {
-                if (playerCameraFovCoroutine != null) StopCoroutine(playerCameraFovCoroutine);
                 playerCameraFovCoroutine = StartCoroutine(ChangeCameraFov(playerCameraMinFov));
             }
 
@@ -121,6 +113,7 @@ namespace Spellplague.Player
 
         private IEnumerator ChangeCameraFov(float fov)
         {
+            if (playerCameraFovCoroutine != null) StopCoroutine(playerCameraFovCoroutine);
             while (!Mathf.Approximately(playerCamera.fieldOfView, fov))
             {
                 playerCamera.fieldOfView = Mathf.Lerp(playerCamera.fieldOfView, fov,
@@ -136,29 +129,17 @@ namespace Spellplague.Player
         #endregion
 
         #region Jump Events
-        private async void JumpPerformedAsync(InputAction.CallbackContext callback)
+        private void JumpPerformed(InputAction.CallbackContext callback)
         {
             if (isJumping || isCrouching || !isGrounded) { return; }
-            isJumping = true;
-            maxVerticalHeight = playerTransform.position.y + jumpHeight;
-            timeBeforeJump = Time.realtimeSinceStartup + maxJumpTime;
-            isJumping = await JumpAsync();
+            StartCoroutine(ActivateJump());
         }
 
-        private async Task<bool> JumpAsync()
+        private IEnumerator ActivateJump()
         {
-            playerState.CurrentPlayerStance = PlayerStance.Jump;
-            float jumpMultiplier = 1;
-            while (playerTransform.position.y < maxVerticalHeight && Time.realtimeSinceStartup < timeBeforeJump)
-            {
-                playerTransform.position = SPUtility.SmoothStep(playerTransform.position, playerTransform.position
-                            + Vector3.up, jumpTime * jumpMultiplier * Time.deltaTime);
-                jumpMultiplier -= jumpMultiplierValue * Time.deltaTime;
-                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
-            }
-
-            playerState.CurrentPlayerStance = PlayerStance.Upright;
-            return false;
+            isJumping = true;
+            yield return jumpWFS;
+            isJumping = false;
         }
         #endregion
 
@@ -184,8 +165,15 @@ namespace Spellplague.Player
                 moveValue.z = moveReadValue.y * movementSpeed * Time.deltaTime;
                 Crouch();
                 Sprint();
-                Move();
             }
+            else
+            {
+                moveValue = Vector3.zero;
+            }
+
+            Vector3 movementVector = CalculateMovement();
+            movementVector += Jump();
+            Move(movementVector);
         }
 
         private void Crouch()
@@ -204,11 +192,21 @@ namespace Spellplague.Player
             }
         }
 
-        private void Move()
+        private Vector3 CalculateMovement()
+            => playerTransform.right * moveValue.x + playerTransform.forward * moveValue.z;
+
+        private Vector3 Jump()
         {
-            Vector3 movement = playerTransform.right * moveValue.x + playerTransform.forward * moveValue.z;
-            characterController.Move(movement);
+            if (isJumping)
+            {
+                return Vector3.up * jumpSpeed * Time.deltaTime;
+            }
+
+            return Vector3.zero;
         }
+
+        private void Move(Vector3 movement)
+            => characterController.Move(movement);
 
         private void OnDisable()
         {
@@ -220,7 +218,7 @@ namespace Spellplague.Player
             inputSystem.Value.Player.Sprint.canceled -= SprintCanceled;
             playerGravity.IsGroundedEvent -= IsGrounded;
             inputSystem.Value.Player.Jump.Disable();
-            inputSystem.Value.Player.Jump.performed -= JumpPerformedAsync;
+            inputSystem.Value.Player.Jump.performed -= JumpPerformed;
             inputSystem.Value.Player.Crouch.Disable();
             inputSystem.Value.Player.Crouch.performed -= CrouchPerformed;
             inputSystem.Value.Player.Crouch.canceled -= CrouchCanceled;
