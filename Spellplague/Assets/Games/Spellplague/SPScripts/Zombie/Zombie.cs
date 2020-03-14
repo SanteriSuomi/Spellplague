@@ -73,15 +73,16 @@ namespace Spellplague.AI
                 Wander();
                 agent.speed = wanderSpeed;
             }
+
             SearchForPlayer();
         }
 
         public void SearchForPlayer()
         {
-            
-            Physics.Raycast(transform.position, (target.transform.position - transform.position).normalized, 
+
+            Physics.Raycast(transform.position, (target.transform.position - transform.position).normalized,
                 out RaycastHit hitRay, viewDistance * radiusViewDistanceMultiplier);
-            if (hitRay.collider != null 
+            if (hitRay.collider != null
                 && !hitRay.transform.CompareTag("Player"))
             {
                 return;
@@ -172,10 +173,8 @@ namespace Spellplague.AI
                 {
                     wanderPoint = RandomWanderPoint();
                 }
-                else
-                {
-                    agent.SetDestination(wanderPoint);
-                }
+
+                agent.SetDestination(wanderPoint);
             }
             else
             {
@@ -210,10 +209,19 @@ namespace Spellplague.AI
         private Vector3 RandomWanderPoint()
         {
             Vector3 randomPoint = (Random.insideUnitSphere * wanderRadius) + transform.position;
-            NavMesh.SamplePosition(randomPoint, out NavMeshHit navHit, wanderRadius, -1);
-            return new Vector3(navHit.position.x, transform.position.y, navHit.position.z);
+            NavMesh.SamplePosition(randomPoint, out NavMeshHit navHit, wanderRadius, NavMesh.AllAreas);
+            Vector3 newPosition = new Vector3(navHit.position.x, transform.position.y, navHit.position.z);
+
+            NavMeshPath path = new NavMeshPath();
+            NavMesh.CalculatePath(transform.position, newPosition, NavMesh.AllAreas, path);
+            if (path.status == NavMeshPathStatus.PathComplete) // Path is valid
+            {
+                return newPosition;
+            }
+
+            return RandomWanderPoint();
         }
-        
+
         public override void DeathEvent() => Destroy(gameObject);
 
         #if UNITY_EDITOR

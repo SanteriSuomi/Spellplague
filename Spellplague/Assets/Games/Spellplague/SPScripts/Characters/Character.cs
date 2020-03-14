@@ -16,6 +16,10 @@ namespace Spellplague.Characters
             set => health = value;
         }
 
+        [SerializeField]
+        private new string name = default;
+        public string GetName() => name;
+
         public virtual void TakeDamage(float damage)
         {
             Health.Value -= damage;

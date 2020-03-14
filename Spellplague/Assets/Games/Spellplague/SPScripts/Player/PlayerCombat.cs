@@ -106,7 +106,7 @@ namespace Spellplague.Player
             {
                 float randomDamageMultiplier = Random.Range(damageRandomMultiplierRange.x, damageRandomMultiplierRange.y);
                 enemy.TakeDamage(amount * randomDamageMultiplier);
-                DamagePopup(enemy.GetTransform().gameObject, (int)(amount * randomDamageMultiplier));
+                DamagePopup(enemy, (int)(amount * randomDamageMultiplier));
             }
         }
 
@@ -141,10 +141,10 @@ namespace Spellplague.Player
             }
         }
 
-        private void DamagePopup(GameObject enemy, float damageAmount)
+        private void DamagePopup(IDamageable enemy, float damageAmount)
         {
             TextMeshProUGUI damagePopup = Instantiate(damagePopupPrefab, damagePopupParent);
-            damagePopup.text = $"{enemy.name} -{damageAmount}";
+            damagePopup.text = $"{enemy.GetName()} -{damageAmount}";
             damagePopup.rectTransform.position = new Vector2(Random.Range(popupPositionMinimum, Screen.width),
                 Random.Range(popupPositionMinimum, Screen.height - popupPositionMinimum));
             damagePopup.gameObject.SetActive(true);
