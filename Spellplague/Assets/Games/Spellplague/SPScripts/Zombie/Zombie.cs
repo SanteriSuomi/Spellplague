@@ -31,7 +31,6 @@ namespace Spellplague.AI
         private bool isDetecting = false;
         private Vector3 wanderPoint;
         private NavMeshAgent agent;
-        private Renderer zombieRenderer;
         private int waypointIndex = 0;
         private float loseTimer = 0;
         private float zombieDetectionRadius = 5;
@@ -41,18 +40,15 @@ namespace Spellplague.AI
         {
             target = GameObject.FindGameObjectWithTag("Player");
             agent = GetComponent<NavMeshAgent>();
-            zombieRenderer = GetComponent<Renderer>();
             playerDamageComponent = target.GetComponent<IDamageable>();
             wanderPoint = RandomWanderPoint();
-           // anim = GetComponent<Animator>();
         }
 
         private void Update()
         {
-            //anim.SetBool("isWalking", true);
             if (isAware)
             {
-                Vector3 targetVector = (target.transform.position - transform.position);
+                Vector3 targetVector = target.transform.position - transform.position;
 
                 agent.SetDestination(target.transform.position - (targetVector.normalized * destinationOffset));
                 agent.speed = chaseSpeed;
@@ -60,12 +56,10 @@ namespace Spellplague.AI
                 float targetDistance = targetVector.magnitude;
                 if (targetDistance < playerDamageDistance)
                 {
-                   // anim.SetBool("isAttacking", true);
                     playerDamageComponent.TakeDamage(damage * Time.deltaTime);
                 }
                 else if (!isDetecting)
                 {
-                    //anim.SetBool("isAttacking", false);
                     loseTimer += Time.deltaTime;
                     if (loseTimer >= loseThreshold)
                     {
@@ -85,8 +79,10 @@ namespace Spellplague.AI
         public void SearchForPlayer()
         {
             
-            Physics.Raycast(transform.position, (target.transform.position - transform.position).normalized, out RaycastHit hitRay, viewDistance * radiusViewDistanceMultiplier);
-            if (hitRay.collider != null && !hitRay.transform.CompareTag("Player"))
+            Physics.Raycast(transform.position, (target.transform.position - transform.position).normalized, 
+                out RaycastHit hitRay, viewDistance * radiusViewDistanceMultiplier);
+            if (hitRay.collider != null 
+                && !hitRay.transform.CompareTag("Player"))
             {
                 return;
             }
@@ -170,7 +166,6 @@ namespace Spellplague.AI
 
         private void Wander()
         {
-            //Random wandering
             if (wanderType == WanderType.Random)
             {
                 if (Vector3.Distance(transform.position, wanderPoint) < 2f)
@@ -184,7 +179,6 @@ namespace Spellplague.AI
             }
             else
             {
-                //Waypoint wandering
                 if (waypoints.Length >= 2)
                 {
 
@@ -220,16 +214,9 @@ namespace Spellplague.AI
             return new Vector3(navHit.position.x, transform.position.y, navHit.position.z);
         }
         
-        //not sure if works 
-        public override void DeathEvent()
-        {
-            //anim.SetBool("isDying", true);
-            Destroy(gameObject);
-        }
+        public override void DeathEvent() => Destroy(gameObject);
 
-        //not sure if works 
         #if UNITY_EDITOR
-        //To see zombie fov in editor
         private void OnDrawGizmos()
         {
             if (target != null)
