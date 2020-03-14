@@ -9,32 +9,21 @@ namespace Spellplague.Interacting
     {
         [SerializeField] [Tooltip("Name that shows when player is targeting the item.")]
         private string interactItemName = default;
-        public string GetName()
-        {
-            return interactItemName;
-        }
+        public string GetName() => interactItemName;
 
         [SerializeField] [Tooltip("Specify whether to show the interact suffix (e.g Key [E]).")]
         private bool showSuffix = default;
-        public bool ShowSuffix()
-        {
-            return showSuffix;
-        }
+        public bool ShowSuffix() => showSuffix;
 
         [SerializeField] 
         [Tooltip("Event that happens when this object is interacted with. Object has to have a script that inherits IHasInteractEvent. " +
             "Only for special interact events, not the same as inspectable, takeable or item event interface/scripts.")]
         private bool hasInteractEvent = default;
-        public bool HasEvent()
-        {
-            return hasInteractEvent;
-        }
+        public bool HasEvent() => hasInteractEvent;
 
         private IHasInteractorEvent interactorEvent;
-        public IHasInteractorEvent GetEvent()
-        {
-            return interactorEvent;
-        }
+        public IHasInteractorEvent GetEvent() 
+            => interactorEvent;
 
         private void Awake() => InitializeEvent();
 

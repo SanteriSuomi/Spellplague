@@ -52,6 +52,7 @@ namespace Spellplague.Player
         private float stabAnimationLength = 0.2f;
         [SerializeField]
         private float stabAnimationSpeedMultiplier = 3f;
+
         private bool runTasks;
 
         private void Awake() => damageTimer = new Stopwatch();

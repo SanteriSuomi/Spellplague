@@ -21,10 +21,7 @@ namespace Spellplague.Interacting
         [Tooltip("Specify this openables open type. Open == Can be opened without special requirements. " +
             "Others must be specified.")]
         private OpenType openType = OpenType.Open;
-        public OpenType GetOpenType()
-        {
-            return openType;
-        }
+        public OpenType GetOpenType() => openType;
 
         [SerializeField]
         [Tooltip("Item this door openable can be opened with. Only used with the enum Item.")]
@@ -34,7 +31,8 @@ namespace Spellplague.Interacting
 
         private const string openParameterName = "Open";
         private const bool openParameterValue = true;
-        public void Open() => animator.SetBool(openParameterName, openParameterValue);
+        public void Open() 
+            => animator.SetBool(openParameterName, openParameterValue);
 
         public void Execute()
         {

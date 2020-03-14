@@ -19,6 +19,7 @@ namespace Spellplague.Player
         private Camera playerCamera = default;
         [SerializeField]
         private TextMeshProUGUI itemNamerText = default;
+
         [SerializeField]
         private string interactNamerSuffix = "[E]";
         [SerializeField]
@@ -39,9 +40,11 @@ namespace Spellplague.Player
             InteractorRay();
         }
 
-        private void InteractPerformed(InputAction.CallbackContext callback) => interactPerformed = true;
+        private void InteractPerformed(InputAction.CallbackContext callback) 
+            => interactPerformed = true;
 
-        private void InteractCanceled(InputAction.CallbackContext callback) => interactPerformed = false;
+        private void InteractCanceled(InputAction.CallbackContext callback) 
+            => interactPerformed = false;
 
         private async Task InteractorRay()
         {

@@ -1,34 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ShowHint : MonoBehaviour
 {
     public GameObject hint;
 
-	//private AudioSource source;
-
 	void OnTriggerEnter(Collider other)
     {
-		if (other.CompareTag("Player") && hint.gameObject != null && hint.gameObject.activeSelf == false)
+		if (other.CompareTag("Player") 
+            && hint.gameObject != null
+            && !hint.gameObject.activeSelf)
         {
             hint.SetActive(true);
-
-            //if (this.gameObject.GetComponent<AudioSource>() != null)
-            //source = GetComponent<AudioSource>();
-            //source.Play();
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") && hint.gameObject != null && hint.gameObject.activeSelf == true)
+        if (other.CompareTag("Player") 
+            && hint.gameObject != null 
+            && hint.gameObject.activeSelf)
         {
             hint.SetActive(false);
-
-            //if (this.gameObject.GetComponent<AudioSource>() != null)
-            //source = GetComponent<AudioSource>();
-            //source.Play();
         }
     }
 }

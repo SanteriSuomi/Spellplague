@@ -56,13 +56,16 @@ namespace Spellplague.Sounds
 
             await FadeOut();
             audioSource.clip = audioDictionary[audioClip];
-            if (!audioSource.isPlaying) { audioSource.Play(); }
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
             await FadeIn();
         }
 
         private async Task FadeOut()
         {
-            while(audioSource.volume > 0 && keepFading)
+            while (audioSource.volume > 0 && keepFading)
             {
                 audioSource.volume -= Time.deltaTime * fadeMultiplier;
                 await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
@@ -71,7 +74,7 @@ namespace Spellplague.Sounds
 
         private async Task FadeIn()
         {
-            while(audioSource.volume < maxVolume && keepFading)
+            while (audioSource.volume < maxVolume && keepFading)
             {
                 audioSource.volume += Time.deltaTime * fadeMultiplier;
                 await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));

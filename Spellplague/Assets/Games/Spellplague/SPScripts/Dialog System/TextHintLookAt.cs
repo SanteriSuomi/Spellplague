@@ -8,7 +8,9 @@ namespace Spellplague.DialogSystem
 
         private void Awake() => player = FindObjectOfType<Player.Player>().transform;
 
-        private void Update()
+        private void Update() => FaceTowardsPlayer();
+
+        private void FaceTowardsPlayer()
         {
             Vector3 lookDirection = -(player.position - transform.position).normalized;
             transform.rotation = Quaternion.LookRotation(lookDirection, Vector3.up);

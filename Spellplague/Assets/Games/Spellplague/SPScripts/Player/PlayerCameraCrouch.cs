@@ -26,7 +26,6 @@ namespace Spellplague.Player
             if (value == PlayerStance.Crouch)
             {
                 originalPosition = transform.localPosition;
-
                 thirdPersonPosition.Value -= crouchPositionOffset;
                 Vector3 crouchPosition = transform.localPosition - crouchPositionOffset;
                 NewMoveCameraCoroutine(crouchPosition);

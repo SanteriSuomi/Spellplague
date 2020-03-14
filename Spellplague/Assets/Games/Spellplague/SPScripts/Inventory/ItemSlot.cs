@@ -8,19 +8,21 @@ using UnityEngine.EventSystems;
 
 namespace Spellplague.Inventory
 {
-    public class ItemSlot : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IBeginDragHandler, IDragHandler, IPointerUpHandler
+    public class ItemSlot : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, 
+        IBeginDragHandler, IDragHandler, IPointerUpHandler
     {
         public Item SlotItem { get; set; }
         [SerializeField]
         private TextMeshProUGUI stackText = default;
         [SerializeField]
         private RectTransform backgroundRectTransform = default;
+        [SerializeField]
+        PointerEventData.InputButton useItemButton = default;
         private RectTransform localRectTransform;
         private Transform otherItemSlotCollision;
         private Transform localSlotTransform;
         private Vector2 originalPositionBeforeDrag;
-        [SerializeField]
-        PointerEventData.InputButton useItemButton = default;
+
         [SerializeField]
         private string itemSlotTagString = "ItemSlot";
         [SerializeField]
@@ -29,6 +31,7 @@ namespace Spellplague.Inventory
         private float itemSlotMoveSmooth = 1250;
         [SerializeField]
         private float itemSlotMoveUpdateRate = 8.33f;
+
         private int stack;
         public int Stack
         {
@@ -39,6 +42,7 @@ namespace Spellplague.Inventory
                 stackText.text = $"{stack}";
             }
         }
+
         private bool isDraggingItemSlot;
         private bool isHoldingItemLot;
         private bool isTouchingOtherItemSlot;
@@ -155,7 +159,7 @@ namespace Spellplague.Inventory
 
         private void OnDestroy()
         {
-            if (SlotItem.InstantiatedPrefab == null) { return; }
+            if (SlotItem.InstantiatedPrefab is null) { return; }
             Destroy(SlotItem.InstantiatedPrefab);
         }
     }

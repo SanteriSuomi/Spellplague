@@ -14,6 +14,7 @@ namespace Spellplague.Player
         [SerializeField]
         private LayerMask groundedLayersToHit = default;
         private Vector3 gravity;
+
         [SerializeField]
         private float gravityMultiplier = 3.75f;
         [SerializeField]
