@@ -25,7 +25,6 @@ namespace Spellplague.AI
         public float playerDamageDistance = 1.6f;
         public float damage = 10;
         public float destinationOffset = 1.5f;
-        private GameObject target;
 
         private bool isAware = false;
         private bool isDetecting = false;
@@ -35,6 +34,7 @@ namespace Spellplague.AI
         private float loseTimer = 0;
         private float zombieDetectionRadius = 5;
         private IDamageable playerDamageComponent;
+        private GameObject target;
 
         private void Start()
         {
@@ -211,10 +211,9 @@ namespace Spellplague.AI
             Vector3 randomPoint = (Random.insideUnitSphere * wanderRadius) + transform.position;
             NavMesh.SamplePosition(randomPoint, out NavMeshHit navHit, wanderRadius, NavMesh.AllAreas);
             Vector3 newPosition = new Vector3(navHit.position.x, transform.position.y, navHit.position.z);
-
             NavMeshPath path = new NavMeshPath();
             NavMesh.CalculatePath(transform.position, newPosition, NavMesh.AllAreas, path);
-            if (path.status == NavMeshPathStatus.PathComplete) // Path is valid
+            if (path.status == NavMeshPathStatus.PathComplete)
             {
                 return newPosition;
             }
@@ -222,7 +221,8 @@ namespace Spellplague.AI
             return RandomWanderPoint();
         }
 
-        public override void DeathEvent() => Destroy(gameObject);
+        public override void DeathEvent() 
+            => Destroy(gameObject);
 
         #if UNITY_EDITOR
         private void OnDrawGizmos()
