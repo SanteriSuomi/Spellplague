@@ -6,8 +6,8 @@ namespace Spellplague.Characters
     public interface IDamageable
     {
         FloatVariable Health { get; set; }
-        string GetName();
         void TakeDamage(float damage);
+        string GetName();
         void DeathEvent();
         Transform GetTransform();
     }

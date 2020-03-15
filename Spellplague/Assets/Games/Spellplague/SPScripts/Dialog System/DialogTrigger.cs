@@ -6,7 +6,7 @@ namespace Spellplague.DialogSystem
 {
 	public class DialogTrigger : MonoBehaviour
 	{
-		private enum BlendDirection
+		private enum AnimBlendDirection
 		{
 			Up,
 			Down
@@ -36,9 +36,14 @@ namespace Spellplague.DialogSystem
 
 		private void OnTriggerEnter(Collider other)
 		{
+			DialogEnterEvent(other);
+		}
+
+		private void DialogEnterEvent(Collider other)
+		{
 			if (other.CompareTag("Player"))
 			{
-				StartCoroutine(BlendAnimation(BlendDirection.Up));
+				StartCoroutine(BlendAnimation(AnimBlendDirection.Up));
 				inputSystem.Value.Player.ThirdPerson.Disable();
 				inputSystem.Value.Player.ThirdPersonZoom.Disable();
 				dialogController._dialog = dialog;
@@ -48,9 +53,14 @@ namespace Spellplague.DialogSystem
 
 		private void OnTriggerExit(Collider other)
 		{
+			DialogExitEvent(other);
+		}
+
+		private void DialogExitEvent(Collider other)
+		{
 			if (other.CompareTag("Player"))
 			{
-				StartCoroutine(BlendAnimation(BlendDirection.Down));
+				StartCoroutine(BlendAnimation(AnimBlendDirection.Down));
 				inputSystem.Value.Player.ThirdPerson.Enable();
 				inputSystem.Value.Player.ThirdPersonZoom.Enable();
 				dialogBase.SetActive(false);
@@ -73,9 +83,9 @@ namespace Spellplague.DialogSystem
 			guardTransform.rotation = Quaternion.Slerp(guardTransform.rotation, lookRotation, 10 * Time.deltaTime);
 		}
 
-		private IEnumerator BlendAnimation(BlendDirection direction)
+		private IEnumerator BlendAnimation(AnimBlendDirection direction)
 		{
-			if (direction == BlendDirection.Up)
+			if (direction == AnimBlendDirection.Up)
 			{
 				while (guardAnimator.GetFloat(animBlendId) < 1)
 				{
@@ -84,7 +94,7 @@ namespace Spellplague.DialogSystem
 					yield return null;
 				}
 			}
-			else if (direction == BlendDirection.Down)
+			else if (direction == AnimBlendDirection.Down)
 			{
 				while (guardAnimator.GetFloat(animBlendId) > 0)
 				{

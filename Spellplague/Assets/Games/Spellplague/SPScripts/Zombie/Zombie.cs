@@ -36,11 +36,18 @@ namespace Spellplague.AI
         private IDamageable playerDamageComponent;
         private GameObject target;
 
+        private AudioSource zombieAudSrc;
+        [SerializeField]
+        private float attackAudSrcPitch = 1.5f;
+        private float originalAudSrcPitch;
+
         private void Start()
         {
             target = GameObject.FindGameObjectWithTag("Player");
             agent = GetComponent<NavMeshAgent>();
             playerDamageComponent = target.GetComponent<IDamageable>();
+            zombieAudSrc = GetComponent<AudioSource>();
+            originalAudSrcPitch = zombieAudSrc.pitch;
             wanderPoint = RandomWanderPoint();
         }
 
@@ -49,7 +56,6 @@ namespace Spellplague.AI
             if (isAware)
             {
                 Vector3 targetVector = target.transform.position - transform.position;
-
                 agent.SetDestination(target.transform.position - (targetVector.normalized * destinationOffset));
                 agent.speed = chaseSpeed;
 
@@ -79,7 +85,6 @@ namespace Spellplague.AI
 
         public void SearchForPlayer()
         {
-
             Physics.Raycast(transform.position, (target.transform.position - transform.position).normalized,
                 out RaycastHit hitRay, viewDistance * radiusViewDistanceMultiplier);
             if (hitRay.collider != null
@@ -87,7 +92,8 @@ namespace Spellplague.AI
             {
                 return;
             }
-
+            Debug.Log("asd");
+            RadiusChanger();
             if (ZombieDetection())
             {
                 OnAware();
@@ -132,20 +138,22 @@ namespace Spellplague.AI
 
         private bool ZombieDetection()
         {
-            RadiusChanger();
             if (playerState.CurrentPlayerStance == PlayerStance.Crouch)
             {
                 return false;
             }
 
-            Collider[] player = Physics.OverlapSphere(transform.position, zombieDetectionRadius);
-            for (int i = 0; i < player.Length; i++)
+            Collider[] hits = Physics.OverlapSphere(transform.position, zombieDetectionRadius);
+            for (int i = 0; i < hits.Length; i++)
             {
-                if (player[i].transform.CompareTag("Player"))
+                if (hits[i].transform.CompareTag("Player"))
                 {
+                    zombieAudSrc.pitch = attackAudSrcPitch;
                     return true;
                 }
             }
+
+            zombieAudSrc.pitch = originalAudSrcPitch;
             return false;
         }
 

@@ -16,10 +16,10 @@ namespace Spellplague.Characters
         {
             player = FindObjectOfType<Player.Player>().transform;
             distanceCheckerUpdateWFS = new WaitForSeconds(checkDistanceEverySec);
-            StartCoroutine(DistanceChecker());
+            StartCoroutine(LeaveWhenPlayerGoesFar());
         }
 
-        private IEnumerator DistanceChecker()
+        private IEnumerator LeaveWhenPlayerGoesFar()
         {
             while (enabled)
             {
