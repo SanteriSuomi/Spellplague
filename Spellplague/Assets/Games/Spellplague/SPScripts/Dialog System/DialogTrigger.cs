@@ -3,9 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 namespace Spellplague.DialogSystem
-
 {
-
 	public class DialogTrigger : MonoBehaviour
 	{
 		private enum BlendDirection
@@ -19,24 +17,28 @@ namespace Spellplague.DialogSystem
 		[SerializeField]
 		private Animator guardAnimator = default;
 		[SerializeField]
-		private string blendId = "Blend";
+		private Transform guardTransform = default;
+
 		[SerializeField]
-		private float blendingMultiplier = 1.5f;
+		private string animBlendId = "Blend";
+		[SerializeField]
+		private float animBlendingMultiplier = 1.5f;
 
 		public Dialog dialog;
 		public GameObject dialogBase;
 		private DialogController dialogController;
 
-		void Start()
+		private void Start()
 		{
 			dialogController = dialogBase.GetComponentInChildren<DialogController>();
+			guardTransform = transform.parent;
 		}
 
-		void OnTriggerEnter(Collider other)
+		private void OnTriggerEnter(Collider other)
 		{
 			if (other.CompareTag("Player"))
 			{
-				StartCoroutine(BlendAnim(BlendDirection.Up));
+				StartCoroutine(BlendAnimation(BlendDirection.Up));
 				inputSystem.Value.Player.ThirdPerson.Disable();
 				inputSystem.Value.Player.ThirdPersonZoom.Disable();
 				dialogController._dialog = dialog;
@@ -44,34 +46,50 @@ namespace Spellplague.DialogSystem
 			}
 		}
 
-		void OnTriggerExit(Collider other)
+		private void OnTriggerExit(Collider other)
 		{
 			if (other.CompareTag("Player"))
 			{
-				StartCoroutine(BlendAnim(BlendDirection.Down));
+				StartCoroutine(BlendAnimation(BlendDirection.Down));
 				inputSystem.Value.Player.ThirdPerson.Enable();
 				inputSystem.Value.Player.ThirdPersonZoom.Enable();
 				dialogBase.SetActive(false);
 			}
 		}
 
-		private IEnumerator BlendAnim(BlendDirection direction)
+		private void OnTriggerStay(Collider other)
+		{
+			if (other.CompareTag("Player"))
+			{
+				LookTowardsPlayer(other);
+			}
+		}
+
+		private void LookTowardsPlayer(Collider other)
+		{
+			Vector3 lookDirection = (other.transform.position - guardTransform.position).normalized;
+			lookDirection.y = 0;
+			Quaternion lookRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
+			guardTransform.rotation = Quaternion.Slerp(guardTransform.rotation, lookRotation, 10 * Time.deltaTime);
+		}
+
+		private IEnumerator BlendAnimation(BlendDirection direction)
 		{
 			if (direction == BlendDirection.Up)
 			{
-				while (guardAnimator.GetFloat(blendId) < 1)
+				while (guardAnimator.GetFloat(animBlendId) < 1)
 				{
-					guardAnimator.SetFloat(blendId, guardAnimator.GetFloat(blendId) 
-						+ (Time.deltaTime * blendingMultiplier));
+					guardAnimator.SetFloat(animBlendId, guardAnimator.GetFloat(animBlendId) 
+						+ (Time.deltaTime * animBlendingMultiplier));
 					yield return null;
 				}
 			}
-			else
+			else if (direction == BlendDirection.Down)
 			{
-				while (guardAnimator.GetFloat(blendId) > 0)
+				while (guardAnimator.GetFloat(animBlendId) > 0)
 				{
-					guardAnimator.SetFloat(blendId, guardAnimator.GetFloat(blendId) 
-						- (Time.deltaTime * blendingMultiplier));
+					guardAnimator.SetFloat(animBlendId, guardAnimator.GetFloat(animBlendId) 
+						- (Time.deltaTime * animBlendingMultiplier));
 					yield return null;
 				}
 			}
