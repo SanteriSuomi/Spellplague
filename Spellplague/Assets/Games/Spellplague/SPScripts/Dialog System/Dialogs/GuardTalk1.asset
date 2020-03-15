@@ -18,5 +18,7 @@ MonoBehaviour:
   nextDialog: {fileID: 0}
   lines:
   - character: {fileID: 11400000, guid: 5686dbde167bc424a97395f4f62b9aac, type: 2}
-    text: "Well, they are acting like animals, you should do well to avoid them at
-      any cost. I don\u2019t know much else. I\u2019m just a mere guard."
+    text: "Well, if there is one thing I know, it's that they're stupid. It would
+      probably be easier to kill them if you sneaked and attacked them from behind.
+      Or maybe you could just run. I don\u2019t know much else. I\u2019m just a mere
+      guard."

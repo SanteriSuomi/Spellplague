@@ -18,6 +18,6 @@ MonoBehaviour:
   nextDialog: {fileID: 0}
   lines:
   - character: {fileID: 11400000, guid: 5686dbde167bc424a97395f4f62b9aac, type: 2}
-    text: "Whooh! We finally made it. But unfortunately, this is as far as I\u2019m
+    text: "Thank god! We finally made it. But unfortunately, this is as far as I\u2019m
       willing to go. Beyond this is the quarantine zone. It\u2019s filled with infected
       citizens who behave aggressively, so be careful."

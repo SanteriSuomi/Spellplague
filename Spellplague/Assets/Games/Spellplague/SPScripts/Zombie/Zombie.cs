@@ -40,6 +40,9 @@ namespace Spellplague.AI
         [SerializeField]
         private float attackAudSrcPitch = 1.5f;
         private float originalAudSrcPitch;
+        [SerializeField]
+        private float attackAudSrcVolume = 0.375f;
+        private float originalAudSrcVolume;
 
         private void Start()
         {
@@ -48,6 +51,7 @@ namespace Spellplague.AI
             playerDamageComponent = target.GetComponent<IDamageable>();
             zombieAudSrc = GetComponent<AudioSource>();
             originalAudSrcPitch = zombieAudSrc.pitch;
+            originalAudSrcVolume = zombieAudSrc.volume;
             wanderPoint = RandomWanderPoint();
         }
 
@@ -92,7 +96,7 @@ namespace Spellplague.AI
             {
                 return;
             }
-            Debug.Log("asd");
+
             RadiusChanger();
             if (ZombieDetection())
             {
@@ -149,11 +153,13 @@ namespace Spellplague.AI
                 if (hits[i].transform.CompareTag("Player"))
                 {
                     zombieAudSrc.pitch = attackAudSrcPitch;
+                    zombieAudSrc.volume = attackAudSrcVolume;
                     return true;
                 }
             }
 
             zombieAudSrc.pitch = originalAudSrcPitch;
+            zombieAudSrc.volume = originalAudSrcVolume;
             return false;
         }
 
