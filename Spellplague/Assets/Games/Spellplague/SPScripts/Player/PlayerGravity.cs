@@ -31,7 +31,7 @@ namespace Spellplague.Player
             if (!isGrounded)
             {
                 gravity += new Vector3(0, Mathf.Pow(Physics.gravity.y, 2) * gravityMultiplier * Time.deltaTime, 0);
-                characterController.SimpleMove(gravity);
+                characterController.Move(gravity);
             }
             else
             {
@@ -41,13 +41,15 @@ namespace Spellplague.Player
 
         private bool CheckGrounding()
         {
-            bool isGrounded = Physics.CheckSphere(groundedTransform.position, groundedCheckRadius, groundedLayersToHit);
+            bool isGrounded = Physics.CheckSphere(groundedTransform.position, 
+                groundedCheckRadius, groundedLayersToHit);
             IsGroundedEvent(isGrounded);
             return isGrounded;
         }
 
         #if UNITY_EDITOR
-        private void OnDrawGizmos() => Gizmos.DrawWireSphere(groundedTransform.position, groundedCheckRadius);
+        private void OnDrawGizmos() => Gizmos.DrawWireSphere(groundedTransform.position, 
+            groundedCheckRadius);
         #endif
     }
 }
