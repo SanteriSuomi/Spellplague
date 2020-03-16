@@ -26,7 +26,7 @@ namespace Spellplague.Characters
                 float sqrDistanceFromPlayer = (player.position - transform.position).sqrMagnitude;
                 if (sqrDistanceFromPlayer >= minSqrDistanceUntilDestroy)
                 {
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
                 }
 
                 yield return distanceCheckerUpdateWFS;

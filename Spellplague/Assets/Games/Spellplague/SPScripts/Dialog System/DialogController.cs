@@ -1,9 +1,9 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Events;
+﻿using Spellplague.Utility;
 using System.Collections;
-using Spellplague.Utility;
 using System.Text;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace Spellplague.DialogSystem
 {
@@ -47,7 +47,7 @@ namespace Spellplague.DialogSystem
 		}
 
 		void Start()
-		{	
+		{
 			speakerUILeft = speakerLeft.GetComponent<SpeakerUI>();
 			speakerUIRight = speakerRight.GetComponent<SpeakerUI>();
 			panelText = dialogPanel.GetComponentInChildren<Text>();
@@ -165,6 +165,7 @@ namespace Spellplague.DialogSystem
 			dialogPanel.SetActive(false);
 			speakerUILeft.Hide();
 			speakerUIRight.Hide();
+			controls.Value.Player.Movement.Enable();
 		}
 	}
 }

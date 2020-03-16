@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Spellplague.DialogSystem
 {
-	public class DialogTrigger : MonoBehaviour
+	public class GuardDialogTrigger : MonoBehaviour
 	{
 		private enum AnimBlendDirection
 		{
@@ -28,6 +28,8 @@ namespace Spellplague.DialogSystem
 		public GameObject dialogBase;
 		private DialogController dialogController;
 
+		private bool hasSpokenOnce;
+
 		private void Start()
 		{
 			dialogController = dialogBase.GetComponentInChildren<DialogController>();
@@ -44,11 +46,22 @@ namespace Spellplague.DialogSystem
 			if (collision.CompareTag("Player"))
 			{
 				StartCoroutine(BlendAnimation(AnimBlendDirection.Up));
-				inputSystem.Value.Player.ThirdPerson.Disable();
-				inputSystem.Value.Player.ThirdPersonZoom.Disable();
+				DisablePlayerInput();
 				dialogController._dialog = dialog;
 				dialogBase.SetActive(true);
 			}
+		}
+
+		private void DisablePlayerInput()
+		{
+			if (!hasSpokenOnce)
+			{
+				hasSpokenOnce = true;
+				inputSystem.Value.Player.Movement.Disable(); // Disable movement. Gets re-enabled in DialogController.
+			}
+
+			inputSystem.Value.Player.ThirdPerson.Disable();
+			inputSystem.Value.Player.ThirdPersonZoom.Disable();
 		}
 
 		private void OnTriggerExit(Collider collision)
