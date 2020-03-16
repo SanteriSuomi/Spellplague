@@ -9,7 +9,7 @@ using static UnityEngine.InputSystem.InputAction;
 
 namespace Spellplague.DialogSystem
 {
-	[System.Serializable]
+	[Serializable]
 	public class DecisionEvent : UnityEvent<Decision> { }
 
 	public class DialogController : MonoBehaviour
