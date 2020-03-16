@@ -6,6 +6,8 @@ namespace Spellplague.Utility
 {
     public static class SPUtility
     {
+        public const float UpdateMultiplier = 1000;
+
         private const float DefaultTaskDelay = 8.33f;
 
         public static Task TaskDelay() 
@@ -19,6 +21,19 @@ namespace Spellplague.Utility
             return (!Mathf.Approximately(currentPosition.x, desiredPosition.x))
                 || (!Mathf.Approximately(currentPosition.y, desiredPosition.y))
                 || (!Mathf.Approximately(currentPosition.z, desiredPosition.z));
+        }
+
+        public static bool CheckPositionAll(Vector3 currentPosition, Vector3 desiredPosition)
+        {
+            return !(Mathf.Approximately(currentPosition.x, desiredPosition.x)
+                && Mathf.Approximately(currentPosition.y, desiredPosition.y)
+                && Mathf.Approximately(currentPosition.z, desiredPosition.z));
+        }
+
+        public static bool CheckPosition2D(Vector2 currentPosition, Vector2 desiredPosition)
+        {
+            return !(Mathf.Approximately(currentPosition.x, desiredPosition.x)
+                && Mathf.Approximately(currentPosition.y, desiredPosition.y));
         }
 
         public static bool CheckRotation(Quaternion currentRotation, Quaternion desiredRotation)

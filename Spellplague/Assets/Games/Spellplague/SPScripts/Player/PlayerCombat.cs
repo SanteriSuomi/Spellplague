@@ -128,14 +128,14 @@ namespace Spellplague.Player
         {
             Vector3 original = weaponParent.localPosition;
             Vector3 goal = weaponParent.localPosition + new Vector3(0, 0, stabAnimationLength);
-            while (runTasks && CheckPosition(weaponParent.localPosition, goal))
+            while (runTasks && SPUtility.CheckPositionAll(weaponParent.localPosition, goal))
             {
                 weaponParent.localPosition = Vector3.MoveTowards(weaponParent.localPosition, goal,
                     stabAnimationSpeedMultiplier * Time.deltaTime);
                 await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
             }
 
-            while (runTasks && CheckPosition(weaponParent.localPosition, original))
+            while (runTasks && SPUtility.CheckPositionAll(weaponParent.localPosition, original))
             {
                 weaponParent.localPosition = Vector3.MoveTowards(weaponParent.localPosition, original,
                     stabAnimationSpeedMultiplier * Time.deltaTime);
@@ -157,7 +157,7 @@ namespace Spellplague.Player
 
         private async void MovePopup(RectTransform popup, Vector2 towards)
         {
-            while (runTasks && CheckPosition(new Vector2(popup.position.x, popup.position.y), towards))
+            while (runTasks && SPUtility.CheckPosition2D(new Vector2(popup.position.x, popup.position.y), towards))
             {
                 popup.position = Vector2.MoveTowards(popup.position, towards, popupMoveSpeed * Time.deltaTime);
                 await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
@@ -174,26 +174,15 @@ namespace Spellplague.Player
             }
         }
 
-        private bool CheckPosition(Vector2 position, Vector2 goal)
-        {
-            return !(Mathf.Approximately(position.x, goal.x)
-                && Mathf.Approximately(position.y, goal.y));
-        }
-
-        private bool CheckPosition(Vector3 position, Vector3 goal)
-        {
-            return !(Mathf.Approximately(position.x, goal.x)
-                && Mathf.Approximately(position.y, goal.y)
-                && Mathf.Approximately(position.z, goal.z));
-        }
-
         private void OnDisable()
         {
             runTasks = false;
             inputSystem.Value.Player.Hit.Disable();
             inputSystem.Value.Player.Hit.performed -= HitPerformed;
-            CancelInvoke();
+            
         }
+
+        private void OnDestroy() => CancelInvoke();
 
         #if UNITY_EDITOR
         private void OnDrawGizmos() 
