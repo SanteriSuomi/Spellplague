@@ -222,17 +222,29 @@ namespace Spellplague.AI
 
         private Vector3 RandomWanderPoint()
         {
+            Vector3 newWanderPosition = GetRandomPosition();
+            NavMeshPath path = TestPathValidity(newWanderPosition);
+            if (path.status == NavMeshPathStatus.PathComplete)
+            {
+                return newWanderPosition;
+            }
+
+            return RandomWanderPoint(); // Continue until we find a valid path.
+        }
+
+        private Vector3 GetRandomPosition()
+        {
             Vector3 randomPoint = (Random.insideUnitSphere * wanderRadius) + transform.position;
             NavMesh.SamplePosition(randomPoint, out NavMeshHit navHit, wanderRadius, NavMesh.AllAreas);
             Vector3 newPosition = new Vector3(navHit.position.x, transform.position.y, navHit.position.z);
+            return newPosition;
+        }
+
+        private NavMeshPath TestPathValidity(Vector3 newPosition)
+        {
             NavMeshPath path = new NavMeshPath();
             NavMesh.CalculatePath(transform.position, newPosition, NavMesh.AllAreas, path);
-            if (path.status == NavMeshPathStatus.PathComplete)
-            {
-                return newPosition;
-            }
-
-            return RandomWanderPoint();
+            return path;
         }
 
         public override void DeathEvent() 
@@ -251,7 +263,8 @@ namespace Spellplague.AI
                 Vector3 rightRayDirection = rightRayRotation * transform.forward;
                 Gizmos.DrawRay(transform.position, leftRayDirection * viewDistance);
                 Gizmos.DrawRay(transform.position, rightRayDirection * viewDistance);
-                Gizmos.DrawRay(transform.position, (target.transform.position - transform.position).normalized * viewDistance * radiusViewDistanceMultiplier);
+                Gizmos.DrawRay(transform.position, (target.transform.position - transform.position).normalized 
+                    * viewDistance * radiusViewDistanceMultiplier);
             }
         }
         #endif

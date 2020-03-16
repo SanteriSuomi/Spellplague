@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 
 namespace Spellplague.Player
 {
-    #pragma warning disable S3168 // Fire and forget method does not need to return task
+#pragma warning disable S3168 // Fire and forget method does not need to return task
     public class PlayerCombat : MonoBehaviour
     {
         [SerializeField]
@@ -52,6 +52,8 @@ namespace Spellplague.Player
         private float stabAnimationLength = 0.2f;
         [SerializeField]
         private float stabAnimationSpeedMultiplier = 3f;
+        [SerializeField]
+        private float damagePopupDestroyTime = 2.5f;
 
         private bool runTasks;
 
@@ -144,6 +146,7 @@ namespace Spellplague.Player
         private void DamagePopup(IDamageable enemy, float damageAmount)
         {
             TextMeshProUGUI damagePopup = Instantiate(damagePopupPrefab, damagePopupParent);
+            Invoke(nameof(DestroyPopup), damagePopupDestroyTime); // Make sure popup gets destroyed eventually.
             damagePopup.text = $"{enemy.GetName()} -{damageAmount}";
             damagePopup.rectTransform.position = new Vector2(Random.Range(popupPositionMinimum, Screen.width),
                 Random.Range(popupPositionMinimum, Screen.height - popupPositionMinimum));
@@ -160,6 +163,11 @@ namespace Spellplague.Player
                 await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
             }
 
+            DestroyPopup(popup.gameObject);
+        }
+
+        private void DestroyPopup(GameObject popup)
+        {
             if (popup != null)
             {
                 Destroy(popup.gameObject);
@@ -187,7 +195,8 @@ namespace Spellplague.Player
         }
 
         #if UNITY_EDITOR
-        private void OnDrawGizmos() => Gizmos.DrawWireSphere(meleeAreaBase.position, hitSphereRadius);
+        private void OnDrawGizmos() 
+            => Gizmos.DrawWireSphere(meleeAreaBase.position, hitSphereRadius);
         #endif
     }
 }

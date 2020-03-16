@@ -125,7 +125,8 @@ namespace Spellplague.Player
         #endregion
 
         #region Grounded Events
-        private void IsGrounded(bool isGrounded) => this.isGrounded = isGrounded;
+        private void IsGrounded(bool isGrounded) 
+            => this.isGrounded = isGrounded;
         #endregion
 
         #region Jump Events

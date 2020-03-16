@@ -20,7 +20,8 @@ namespace Spellplague.Player
         [SerializeField]
         private float groundedCheckRadius = 0.125f;
 
-        private void Awake() => characterController = GetComponent<CharacterController>();
+        private void Awake() 
+            => characterController = GetComponent<CharacterController>();
 
         private void Update() => Gravity();
 

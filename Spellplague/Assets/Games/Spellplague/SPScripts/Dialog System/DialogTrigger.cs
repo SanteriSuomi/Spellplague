@@ -34,14 +34,14 @@ namespace Spellplague.DialogSystem
 			guardTransform = transform.parent;
 		}
 
-		private void OnTriggerEnter(Collider other)
+		private void OnTriggerEnter(Collider collision)
 		{
-			DialogEnterEvent(other);
+			DialogEnterEvent(collision);
 		}
 
-		private void DialogEnterEvent(Collider other)
+		private void DialogEnterEvent(Collider collision)
 		{
-			if (other.CompareTag("Player"))
+			if (collision.CompareTag("Player"))
 			{
 				StartCoroutine(BlendAnimation(AnimBlendDirection.Up));
 				inputSystem.Value.Player.ThirdPerson.Disable();
@@ -51,14 +51,14 @@ namespace Spellplague.DialogSystem
 			}
 		}
 
-		private void OnTriggerExit(Collider other)
+		private void OnTriggerExit(Collider collision)
 		{
-			DialogExitEvent(other);
+			DialogExitEvent(collision);
 		}
 
-		private void DialogExitEvent(Collider other)
+		private void DialogExitEvent(Collider collision)
 		{
-			if (other.CompareTag("Player"))
+			if (collision.CompareTag("Player"))
 			{
 				StartCoroutine(BlendAnimation(AnimBlendDirection.Down));
 				inputSystem.Value.Player.ThirdPerson.Enable();
@@ -67,17 +67,17 @@ namespace Spellplague.DialogSystem
 			}
 		}
 
-		private void OnTriggerStay(Collider other)
+		private void OnTriggerStay(Collider collision)
 		{
-			if (other.CompareTag("Player"))
+			if (collision.CompareTag("Player"))
 			{
-				LookTowardsPlayer(other);
+				LookTowardsPlayer(collision);
 			}
 		}
 
-		private void LookTowardsPlayer(Collider other)
+		private void LookTowardsPlayer(Collider collision)
 		{
-			Vector3 lookDirection = (other.transform.position - guardTransform.position).normalized;
+			Vector3 lookDirection = (collision.transform.position - guardTransform.position).normalized;
 			lookDirection.y = 0;
 			Quaternion lookRotation = Quaternion.LookRotation(lookDirection, Vector3.up);
 			guardTransform.rotation = Quaternion.Slerp(guardTransform.rotation, lookRotation, 10 * Time.deltaTime);
