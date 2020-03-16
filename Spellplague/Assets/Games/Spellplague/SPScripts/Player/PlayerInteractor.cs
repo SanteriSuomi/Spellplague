@@ -59,7 +59,7 @@ namespace Spellplague.Player
 
                 Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hitInfo, 
                     interactorRayDistance);
-                if (hitInfo.collider != null && hitInfo.collider.TryGetComponent(out IItemInteractor interactor))
+                if (hitInfo.collider != null && hitInfo.collider.TryGetComponent(out IObjectInteractor interactor))
                 {
                     Interactor(interactor);
                 }
@@ -79,7 +79,7 @@ namespace Spellplague.Player
             }
         }
 
-        private void Interactor(IItemInteractor interactor)
+        private void Interactor(IObjectInteractor interactor)
         {
             if (interactor.HasEvent() && interactPerformed)
             {

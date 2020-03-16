@@ -192,6 +192,7 @@ namespace Spellplague.Player
             runTasks = false;
             inputSystem.Value.Player.Hit.Disable();
             inputSystem.Value.Player.Hit.performed -= HitPerformed;
+            CancelInvoke();
         }
 
         #if UNITY_EDITOR

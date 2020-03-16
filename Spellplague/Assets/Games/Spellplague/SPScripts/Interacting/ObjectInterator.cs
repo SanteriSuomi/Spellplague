@@ -3,9 +3,9 @@
 namespace Spellplague.Interacting
 {
     /// <summary>
-    /// Game objects with item interactor will have names popup in the UI and can have special "interact events".
+    /// Game objects with this script will have names popup in the UI and can have special "interact events".
     /// </summary>
-    public class ItemInteractor : MonoBehaviour, IItemInteractor
+    public class ObjectInterator : MonoBehaviour, IObjectInteractor
     {
         [SerializeField] [Tooltip("Name that shows when player is targeting the item.")]
         private string interactItemName = default;

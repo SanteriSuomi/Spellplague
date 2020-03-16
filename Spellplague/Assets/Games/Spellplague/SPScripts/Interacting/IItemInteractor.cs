@@ -1,6 +1,6 @@
 ﻿namespace Spellplague.Interacting
 {
-    public interface IItemInteractor
+    public interface IObjectInteractor
     {
         string GetName();
         bool ShowSuffix();
