@@ -40,22 +40,10 @@ namespace Spellplague.DialogSystem
 		private bool cancelTyping = false;
 		public float typeSpeed;
 
-		private Action<CallbackContext> ctxStartConversation;
-		private Action<CallbackContext> ctxAdvanceLine;
-		private Action<CallbackContext> ctxEndDialog;
+		private void Awake() 
+			=> dialogTextTypeWFS = new WaitForSeconds(typeSpeed);
 
-		void Awake()
-		{
-			dialogTextTypeWFS = new WaitForSeconds(typeSpeed);
-			ctxStartConversation = new Action<CallbackContext>(StartConversation);
-			controls.Value.Player.Inspect.performed += ctxStartConversation;
-			ctxAdvanceLine = new Action<CallbackContext>(AdvanceLine);
-			controls.Value.Player.Inspect.performed += ctxAdvanceLine;
-			ctxEndDialog = new Action<CallbackContext>(EndDialog);
-			controls.Value.UI.Cancel.performed += ctxEndDialog;
-		}
-
-		void Start()
+		private void Start()
 		{
 			speakerUILeft = speakerLeft.GetComponent<SpeakerUI>();
 			speakerUIRight = speakerRight.GetComponent<SpeakerUI>();
@@ -64,7 +52,7 @@ namespace Spellplague.DialogSystem
 			StartConversation(default);
 		}
 
-		private void StartConversation(CallbackContext context)
+		public void StartConversation(CallbackContext context)
 		{
 			if (activeDialog == null) return;
 			if (!dialogActive)
@@ -84,7 +72,7 @@ namespace Spellplague.DialogSystem
 			DisplayLine();
 		}
 
-		void AdvanceLine(CallbackContext context)
+		public void AdvanceLine(CallbackContext context)
 		{
 			if (dialogActive)
 			{
@@ -165,7 +153,7 @@ namespace Spellplague.DialogSystem
 			AdvanceLine(default);
 		}
 
-		private void EndDialog(CallbackContext context)
+		public void EndDialog(CallbackContext context)
 		{
 			activeDialog = _dialog;
 			dialogActive = false;
@@ -175,13 +163,6 @@ namespace Spellplague.DialogSystem
 			speakerUILeft.Hide();
 			speakerUIRight.Hide();
 			controls.Value.Player.Movement.Enable();
-		}
-
-		private void OnDisable()
-		{
-			controls.Value.Player.Inspect.performed -= ctxStartConversation;
-			controls.Value.Player.Inspect.performed -= ctxAdvanceLine;
-			controls.Value.UI.Cancel.performed -= ctxEndDialog;
 		}
 	}
 }
