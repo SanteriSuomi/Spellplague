@@ -1,9 +1,11 @@
 ﻿using Spellplague.Utility;
+using System;
 using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static UnityEngine.InputSystem.InputAction;
 
 namespace Spellplague.DialogSystem
 {
@@ -38,12 +40,22 @@ namespace Spellplague.DialogSystem
 		private bool cancelTyping = false;
 		public float typeSpeed;
 
+		private Action<CallbackContext> ctxStartConversation;
+		private Action<CallbackContext> ctxAdvanceLine;
+		private Action<CallbackContext> ctxEndDialog;
+
 		void Awake()
 		{
 			dialogTextTypeWFS = new WaitForSeconds(typeSpeed);
-			controls.Value.Player.Inspect.performed += ctx => StartConversation();
-			controls.Value.Player.Inspect.performed += ctx => AdvanceLine();
-			controls.Value.UI.Cancel.performed += ctx => EndDialog();
+
+			ctxStartConversation = new Action<CallbackContext>(StartConversation);
+			controls.Value.Player.Inspect.performed += ctxStartConversation;
+
+			ctxAdvanceLine = new Action<CallbackContext>(AdvanceLine);
+			controls.Value.Player.Inspect.performed += ctxAdvanceLine;
+
+			ctxEndDialog = new Action<CallbackContext>(EndDialog);
+			controls.Value.UI.Cancel.performed += ctxEndDialog;
 		}
 
 		void Start()
@@ -52,10 +64,10 @@ namespace Spellplague.DialogSystem
 			speakerUIRight = speakerRight.GetComponent<SpeakerUI>();
 			panelText = dialogPanel.GetComponentInChildren<Text>();
 			activeDialog = _dialog;
-			StartConversation();
+			StartConversation(default);
 		}
 
-		private void StartConversation()
+		private void StartConversation(CallbackContext context)
 		{
 			if (activeDialog == null) return;
 			if (!dialogActive)
@@ -75,7 +87,7 @@ namespace Spellplague.DialogSystem
 			DisplayLine();
 		}
 
-		void AdvanceLine()
+		void AdvanceLine(CallbackContext context)
 		{
 			if (dialogActive)
 			{
@@ -146,17 +158,17 @@ namespace Spellplague.DialogSystem
 			else if (activeDialog.nextDialog != null)
 				ChangeDialog(activeDialog.nextDialog);
 			else
-				EndDialog();
+				EndDialog(default);
 		}
 
 		public void ChangeDialog(Dialog nextDialog)
 		{
 			dialogStarted = false;
 			activeDialog = nextDialog;
-			AdvanceLine();
+			AdvanceLine(default);
 		}
 
-		private void EndDialog()
+		private void EndDialog(CallbackContext context)
 		{
 			activeDialog = _dialog;
 			dialogActive = false;
@@ -166,6 +178,13 @@ namespace Spellplague.DialogSystem
 			speakerUILeft.Hide();
 			speakerUIRight.Hide();
 			controls.Value.Player.Movement.Enable();
+		}
+
+		private void OnDisable()
+		{
+			controls.Value.Player.Inspect.performed -= ctxStartConversation;
+			controls.Value.Player.Inspect.performed -= ctxAdvanceLine;
+			controls.Value.UI.Cancel.performed -= ctxEndDialog;
 		}
 	}
 }
