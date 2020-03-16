@@ -31,7 +31,7 @@ namespace Spellplague.Player
             if (!isGrounded)
             {
                 gravity += new Vector3(0, Mathf.Pow(Physics.gravity.y, 2) * gravityMultiplier * Time.deltaTime, 0);
-                characterController.Move(gravity);
+                characterController.SimpleMove(gravity);
             }
             else
             {
