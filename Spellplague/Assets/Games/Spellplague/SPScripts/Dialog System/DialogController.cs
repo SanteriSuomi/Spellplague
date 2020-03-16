@@ -47,13 +47,10 @@ namespace Spellplague.DialogSystem
 		void Awake()
 		{
 			dialogTextTypeWFS = new WaitForSeconds(typeSpeed);
-
 			ctxStartConversation = new Action<CallbackContext>(StartConversation);
 			controls.Value.Player.Inspect.performed += ctxStartConversation;
-
 			ctxAdvanceLine = new Action<CallbackContext>(AdvanceLine);
 			controls.Value.Player.Inspect.performed += ctxAdvanceLine;
-
 			ctxEndDialog = new Action<CallbackContext>(EndDialog);
 			controls.Value.UI.Cancel.performed += ctxEndDialog;
 		}
