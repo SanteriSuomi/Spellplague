@@ -50,7 +50,7 @@ namespace Spellplague.Player
         {
             while (runTasks)
             {
-                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * (interactorUpdateRate * 1000)));
+                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * (interactorUpdateRate * SPUtility.CommonUpdateMultiplier)));
                 if (playerState.CurrentPlayerSpecialState == PlayerSpecialState.Inspecting)
                 {
                     EmptyText();

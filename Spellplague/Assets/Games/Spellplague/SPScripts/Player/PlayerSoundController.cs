@@ -123,7 +123,7 @@ namespace Spellplague.Player
         }
 
         private Task DelayDeltaTime() 
-            => Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
+            => Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * SPUtility.CommonUpdateMultiplier));
 
         private void OnDisable() => runTasks = false;
     }

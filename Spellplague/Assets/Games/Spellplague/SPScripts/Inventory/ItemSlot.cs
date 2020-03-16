@@ -31,6 +31,8 @@ namespace Spellplague.Inventory
         private float itemSlotMoveSmooth = 1250;
         [SerializeField]
         private float itemSlotMoveUpdateRate = 8.33f;
+        [SerializeField]
+        private float instantiatedInventoryPrefabOffset = -1000;
 
         private int stack;
         public int Stack
@@ -52,7 +54,8 @@ namespace Spellplague.Inventory
         {
             if (SlotItem.Prefab != null)
             {
-                SlotItem.InstantiatedPrefab = Instantiate(SlotItem.Prefab, transform.up * -1000, Quaternion.identity);
+                SlotItem.InstantiatedPrefab = Instantiate(SlotItem.Prefab, 
+                    transform.up * instantiatedInventoryPrefabOffset, Quaternion.identity);
             }
 
             localSlotTransform = transform;

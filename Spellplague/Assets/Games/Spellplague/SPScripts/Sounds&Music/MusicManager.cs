@@ -68,7 +68,7 @@ namespace Spellplague.Sounds
             while (audioSource.volume > 0 && keepFading)
             {
                 audioSource.volume -= Time.deltaTime * fadeMultiplier;
-                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
+                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * SPUtility.CommonUpdateMultiplier));
             }
         }
 
@@ -77,7 +77,7 @@ namespace Spellplague.Sounds
             while (audioSource.volume < maxVolume && keepFading)
             {
                 audioSource.volume += Time.deltaTime * fadeMultiplier;
-                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
+                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * SPUtility.CommonUpdateMultiplier));
             }
         }
 

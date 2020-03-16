@@ -69,7 +69,7 @@ namespace Spellplague.Player
 
         private void HitPerformed(InputAction.CallbackContext callback)
         {
-            if (damageTimer.ElapsedMilliseconds < hitCooldownSeconds * 1000
+            if (damageTimer.ElapsedMilliseconds < hitCooldownSeconds * SPUtility.CommonUpdateMultiplier
                 || playerState.CurrentInventoryState != InventoryState.Closed) { return; }
             damageTimer.Restart();
 
@@ -132,14 +132,14 @@ namespace Spellplague.Player
             {
                 weaponParent.localPosition = Vector3.MoveTowards(weaponParent.localPosition, goal,
                     stabAnimationSpeedMultiplier * Time.deltaTime);
-                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
+                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * SPUtility.CommonUpdateMultiplier));
             }
 
             while (runTasks && SPUtility.CheckPositionAll(weaponParent.localPosition, original))
             {
                 weaponParent.localPosition = Vector3.MoveTowards(weaponParent.localPosition, original,
                     stabAnimationSpeedMultiplier * Time.deltaTime);
-                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
+                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * SPUtility.CommonUpdateMultiplier));
             }
         }
 
@@ -160,7 +160,7 @@ namespace Spellplague.Player
             while (runTasks && SPUtility.CheckPosition2D(new Vector2(popup.position.x, popup.position.y), towards))
             {
                 popup.position = Vector2.MoveTowards(popup.position, towards, popupMoveSpeed * Time.deltaTime);
-                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
+                await Task.Delay(TimeSpan.FromMilliseconds(Time.deltaTime * SPUtility.CommonUpdateMultiplier));
             }
 
             DestroyPopup(popup.gameObject);

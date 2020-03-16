@@ -246,7 +246,7 @@ namespace Spellplague.Player
                     itemPositionResetSpeed * Time.deltaTime);
                 inspectingItem.rotation = Quaternion.RotateTowards(inspectingItem.rotation, originalItemRotation,
                     itemRotationResetSpeed * Time.deltaTime);
-                await TaskDelay(Time.deltaTime * 1000);
+                await TaskDelay(Time.deltaTime * SPUtility.CommonUpdateMultiplier);
             }
 
             isResettingItem = false;

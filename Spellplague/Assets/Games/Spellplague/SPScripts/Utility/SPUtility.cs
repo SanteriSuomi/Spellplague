@@ -6,7 +6,10 @@ namespace Spellplague.Utility
 {
     public static class SPUtility
     {
-        public const float UpdateMultiplier = 1000;
+        /// <summary>
+        /// Multiplier that is commonly used throughout the project.
+        /// </summary>
+        public const float CommonUpdateMultiplier = 1000;
 
         private const float DefaultTaskDelay = 8.33f;
 
@@ -43,11 +46,11 @@ namespace Spellplague.Utility
                 || (!Mathf.Approximately(currentRotation.eulerAngles.z, desiredRotation.eulerAngles.z));
         }
 
-        public static Vector3 SmoothStep(Vector3 start, Vector3 end, float smoothAmount)
+        public static Vector3 SmoothStep(Vector3 startPosition, Vector3 endPosition, float smoothAmount)
         {
-            float x = Mathf.SmoothStep(start.x, end.x, smoothAmount);
-            float y = Mathf.SmoothStep(start.y, end.y, smoothAmount);
-            float z = Mathf.SmoothStep(start.z, end.z, smoothAmount);
+            float x = Mathf.SmoothStep(startPosition.x, endPosition.x, smoothAmount);
+            float y = Mathf.SmoothStep(startPosition.y, endPosition.y, smoothAmount);
+            float z = Mathf.SmoothStep(startPosition.z, endPosition.z, smoothAmount);
             return new Vector3(x, y, z);
         }
     }
